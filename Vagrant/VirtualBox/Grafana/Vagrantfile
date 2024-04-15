@@ -1,17 +1,19 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/bionic64"
-  config.vm.hostname = "homelab.local"
+  config.vm.hostname = "grafana.local"
   config.vm.network "public_network"
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
   config.vm.disk :disk, name: "primary-storage", size: "20GB"
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
   config.vm.provider "virtualbox" do |vb|
-      vb.memory = "1024"
+      vb.memory = "2048"
       vb.cpus = 1
     end
   
   config.vm.provision "shell", inline: <<-SHELL
     echo "Running provisioning script..."
     apt-get update
+    apt-get upgrade -y
     apt-get install -y ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -23,5 +25,8 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     apt-get update
+    sudo docker volume create grafana-storage
+    cd /vagrant
+    sudo docker compose up -d
   SHELL
 end

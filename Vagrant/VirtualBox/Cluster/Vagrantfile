@@ -14,6 +14,7 @@ Vagrant.configure("2") do |config|
         vm_config.vm.provision "shell", inline: <<-SHELL
           echo "Running provisioning script..."
           apt-get update
+          apt-get upgrade -y
           apt-get install -y ca-certificates curl
           sudo install -m 0755 -d /etc/apt/keyrings
           sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
