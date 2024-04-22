@@ -1,0 +1,27 @@
+---
+- name: Update and upgrade all Ubuntu servers
+  hosts: name # Replace "name" with respective group or host
+  become: yes
+  tasks:
+    - name: Ensure the apt cache is updated
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: yes
+
+    - name: Remove unnecessary packages and dependencies
+      ansible.builtin.apt:
+        autoremove: yes
+        purge: yes
+
+    - name: Clean up the apt cache
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: Reboot the machine if needed
+      ansible.builtin.reboot:
+        msg: "Rebooting for system updates"
+        reboot_timeout: 600
