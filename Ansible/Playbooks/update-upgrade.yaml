@@ -21,7 +21,7 @@
       ansible.builtin.apt:
         autoclean: yes
 
-    - name: Reboot the machine if needed
-      ansible.builtin.reboot:
-        msg: "Rebooting for system updates"
-        reboot_timeout: 600
+    # - name: Reboot the machine if needed
+    #   ansible.builtin.reboot:
+    #     msg: "Rebooting for system updates"
+    #     reboot_timeout: 600
